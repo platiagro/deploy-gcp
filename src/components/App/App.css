@@ -1,0 +1,62 @@
+#root, .ant-layout, body {
+  width: 100%;
+  height: 100%;
+}
+
+.ant-layout-header {
+  background: linear-gradient(91.64deg, #3f6600 1.09%, #004e66 98.14%);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  height: 64px;
+  line-height: 64px;
+  padding: 0;
+  width: 100%;
+}
+
+.logo {
+  margin: 0 40px;
+  float: left;
+}
+
+.rootPage {
+  background: linear-gradient(91.64deg, #3f6600 1.09%, #004e66 98.14%);
+  height: 100%;
+}
+
+.rootPageBody {
+  margin: 5% 10%;
+  width: auto
+}
+
+.description {
+  color: #fff;
+  padding-right: 16px;
+}
+
+p, li {
+  font-size: 1.05rem;
+  line-height: 1.8rem;
+}
+
+h1.ant-typography {
+  font-size: 1.4rem;
+  margin-bottom: 40px;
+}
+
+h2.ant-typography {
+  font-size: 1.1rem;
+  margin-bottom: 40px;
+}
+
+.white {
+  color: #fff !important;
+}
+
+.gray {
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+.deployForm {
+  border-radius: 5px;
+  box-shadow: rgb(102, 102, 102) 0px 5px 15px 0px;
+  padding: 30px 50px;
+}
