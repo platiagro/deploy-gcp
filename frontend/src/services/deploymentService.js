@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+export const URL =
+  process.env.BACKEND_API || 'http://localhost:8080';
+
 const backend = axios.create({
-  baseURL: 'http://localhost:8080'
+  baseURL: URL
 });
 
 export const createDeployment = async (projectId, zone, clusterId, configFile, token) => {
