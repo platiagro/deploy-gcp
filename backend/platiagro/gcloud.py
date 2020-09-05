@@ -159,7 +159,7 @@ def create_cluster(project_id: str, location: str, cluster_id: str, token: str) 
                     "name": "default-pool",
                     "initialNodeCount": 2,
                     "config": {
-                        "machineType": "n1-standard-2",
+                        "machineType": "e2-standard-2",
                     }
                 },
             ],

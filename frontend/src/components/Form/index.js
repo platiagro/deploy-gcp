@@ -190,7 +190,7 @@ class DeployForm extends React.Component {
 const WaitingForm = () => (
   <>
     <Spin />
-    <p style={{ textAlign: 'center' }}>Aguarde um instante enquanto a infraestrutura é criada na Google Cloud.</p>
+    <p style={{ textAlign: 'center' }}>Aguarde alguns minutos enquanto a infraestrutura é criada na Google Cloud.</p>
   </>
 );
 

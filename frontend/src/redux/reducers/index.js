@@ -26,13 +26,21 @@ const initialState = {
   ],
   versionList: [
     {
-      value: 'https://raw.githubusercontent.com/platiagro/manifests/platiagro-v0.0.2/kfdef/kfctl_platiagro.yaml',
-      text: 'v0.0.1'
-    }
+      value: 'https://raw.githubusercontent.com/platiagro/manifests/v0.1.0-kubeflow-v1.0-branch/kfdef/kfctl_platiagro.v0.1.0.yaml',
+      text: 'v0.1.0'
+    },
+    {
+      value: 'https://raw.githubusercontent.com/platiagro/manifests/feature/dojot-installer/kfdef/kfctl_dojot.v0.4.3.yaml',
+      text: 'v0.1.0 + dojot v0.4.3'
+    },
+    {
+      value: 'https://raw.githubusercontent.com/platiagro/manifests/v0.0.2-kubeflow-v1.0-branch/kfdef/kfctl_platiagro.v0.0.2.yaml',
+      text: 'v0.0.2'
+    },
   ],
   projectId: '',
   zone: 'us-central1-a',
-  version: 'https://raw.githubusercontent.com/platiagro/manifests/platiagro-v0.0.2/kfdef/kfctl_platiagro.yaml',
+  version: 'https://raw.githubusercontent.com/platiagro/manifests/v0.1.0-kubeflow-v1.0-branch/kfdef/kfctl_platiagro.v0.1.0.yaml',
   clusterId: 'platiagro',
   status: '',
   url: '',
