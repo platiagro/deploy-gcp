@@ -1,4 +1,5 @@
 """WSGI server."""
+import os
 import sys
 
 from flask import Flask, request, jsonify, send_from_directory
@@ -47,4 +48,5 @@ if __name__ == "__main__":
         logger.warning("Enabling CORS")
         CORS(app)
 
-    app.run(host="0.0.0.0", port=8080)
+    port = int(os.getenv("PORT", "8080"))
+    app.run(host="0.0.0.0", port=port)

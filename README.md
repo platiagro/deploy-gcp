@@ -4,4 +4,4 @@
 
 Easily deploy PlatIAgro on Google Cloud.
 
-[https://platiagro.github.io/deploy-gcp/](https://platiagro.github.io/deploy-gcp/)
+[https://platiagro-gcp.herokuapp.com/](https://platiagro-gcp.herokuapp.com/)
