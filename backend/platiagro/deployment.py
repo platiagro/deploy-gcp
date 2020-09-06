@@ -55,8 +55,7 @@ def get_deployment_status(params: dict) -> dict:
             url = "http://{}".format(ip)
             # verify the platform is up and running
             retry_strategy = Retry(
-                total=10,
-                backoff_factor=0.1,
+                total=5,
                 status_forcelist=[429, 500, 502, 503, 504],
                 method_whitelist=["HEAD", "GET", "OPTIONS"]
             )

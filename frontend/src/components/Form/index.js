@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  Layout, Typography, Form, Button, Select, Divider, Spin, Alert, Icon
+  Layout, Typography, Form, Button, Select, Divider, Spin, Alert
 } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 import {
   updateSigninStatus, fetchProjects, setProjectId,
@@ -124,15 +125,15 @@ class DeployForm extends React.Component {
                   <div>
                     {menu}
                     <Divider style={{ margin: '4px 0' }} />
-                    <ul
-                      className='ant-select-dropdown-menu ant-select-dropdown-menu-root ant-select-dropdown-menu-vertical'>
-                      <li
-                        className='ant-select-dropdown-menu-item'
+                    <div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
+                      <a
+                        style={{ flex: 'none', padding: '8px', display: 'block', cursor: 'pointer' }}
                         onMouseDown={e => e.preventDefault()}
-                        onClick={e => window.open('https://console.cloud.google.com/projectcreate?project=&folder=&organizationId=0')}>
-                        <Icon type='plus' /> Criar um novo projeto
-                      </li>
-                    </ul>
+                        onClick={e => window.open('https://console.cloud.google.com/projectcreate?project=&folder=&organizationId=0')}
+                      >
+                        <PlusOutlined /> Criar um novo projeto
+                      </a>
+                    </div>
                   </div>
                 )}>
                 {projectList.map((p) => (
