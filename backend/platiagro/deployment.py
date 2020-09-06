@@ -8,8 +8,10 @@ from subprocess import run
 from tempfile import mkdtemp
 from time import sleep
 
-from requests import get
+from requests import Session
+from requests.adapters import HTTPAdapter
 from requests.exceptions import HTTPError
+from requests.packages.urllib3.util.retry import Retry
 from yaml import dump
 
 from .gcloud import enable_service, get_service_account, create_service_account, \
@@ -51,7 +53,17 @@ def get_deployment_status(params: dict) -> dict:
         m = match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", ip)
         if ip is not None and m is not None:
             url = "http://{}".format(ip)
-            resp = get(url)
+            # verify the platform is up and running
+            retry_strategy = Retry(
+                total=10,
+                backoff_factor=0.1,
+                status_forcelist=[429, 500, 502, 503, 504],
+                method_whitelist=["HEAD", "GET", "OPTIONS"]
+            )
+            adapter = HTTPAdapter(max_retries=retry_strategy)
+            sess = Session()
+            sess.mount("http://", adapter)
+            resp = sess.get(url)
             resp.raise_for_status()
             return {"status": RUNNING, "url": url}
     except HTTPError as e:
