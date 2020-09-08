@@ -6,23 +6,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-
-    - name: Checkout 🛎️
-      uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
-      with:
-        persist-credentials: false
-
-    - name: Build 🔧 # This example project is built using yarn and outputs the result to the 'build' folder.
-      run: |
-        cd frontend
-        yarn
-        yarn build
-      env:
-        PUBLIC_URL: https://platiagro.github.io/deploy-gcp/
-
-    - name: Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: gh-pages # The branch the action should deploy to.
-        FOLDER: frontend/build # The folder the action should deploy.
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+      - name: Deploy 🚀
+        uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "platiagro-gcp" # Must be unique in Heroku
+          heroku_email: "fabio.beranizo@gmail.com"
