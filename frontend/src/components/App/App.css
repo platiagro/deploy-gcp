@@ -60,3 +60,16 @@ h2.ant-typography {
   box-shadow: rgb(102, 102, 102) 0px 5px 15px 0px;
   padding: 30px 50px;
 }
+
+.login-form-button {
+  color: #fff;
+  background: #0050b3;
+  border-color: #0050b3;
+  margin-right: 8px;
+}
+
+.login-form-button:focus, .login-form-button:hover {
+  color: #fff;
+  background: #1f6cbf;
+  border-color: #1f6cbf;
+}

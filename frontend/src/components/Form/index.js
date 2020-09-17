@@ -7,7 +7,7 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import {
   updateSigninStatus, fetchProjects, setProjectId,
-  setZone, setVersion, startDeployment, verifyDeploymentStatus
+  setZone, setVersion, startDeployment, signOut, verifyDeploymentStatus
 } from '../../redux/actions';
 
 const { Title } = Typography;
@@ -77,7 +77,7 @@ class DeployForm extends React.Component {
   renderSwitch(status) {
     const {
       token, projectList, zoneList, versionList, projectId, setProjectId,
-      zone, setZone, version, setVersion, startDeployment
+      zone, setZone, version, setVersion, startDeployment, signOut,
     } = this.props;
 
     const projectIdProps = {};
@@ -126,13 +126,14 @@ class DeployForm extends React.Component {
                     {menu}
                     <Divider style={{ margin: '4px 0' }} />
                     <div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
-                      <a
+                      <Button
+                        type='link'
                         style={{ flex: 'none', padding: '8px', display: 'block', cursor: 'pointer' }}
                         onMouseDown={e => e.preventDefault()}
                         onClick={e => window.open('https://console.cloud.google.com/projectcreate?project=&folder=&organizationId=0')}
                       >
                         <PlusOutlined /> Criar um novo projeto
-                      </a>
+                      </Button>
                     </div>
                   </div>
                 )}>
@@ -169,7 +170,13 @@ class DeployForm extends React.Component {
                 htmlType='button'
                 className='login-form-button'
                 onClick={() => startDeployment(projectId, zone, version, token)}>
-                Criar Implantação
+                Implantar
+              </Button>
+              <Button
+                htmlType='button'
+                className='signout-form-button'
+                onClick={() => signOut()}>
+                Sair da conta Google
               </Button>
             </Form.Item>
           </Form>
@@ -199,7 +206,7 @@ const CustomForm = ({
   isAuthorized, token, updateSigninStatus, fetchProjects,
   createProject, projectList, zoneList, versionList, projectId, setProjectId,
   zone, setZone, version, setVersion,
-  clusterId, startDeployment, status, url, isPolling, verifyDeploymentStatus
+  clusterId, startDeployment, signOut, status, url, isPolling, verifyDeploymentStatus
 }) => (
     <Layout className='deployForm'>
 
@@ -219,6 +226,7 @@ const CustomForm = ({
           setVersion={setVersion}
           clusterId={clusterId}
           startDeployment={startDeployment}
+          signOut={signOut}
           status={status}
           url={url}
           isPolling={isPolling}
@@ -263,6 +271,7 @@ const mapDispatchToProps = {
   setZone,
   setVersion,
   startDeployment,
+  signOut,
   verifyDeploymentStatus,
 };
 

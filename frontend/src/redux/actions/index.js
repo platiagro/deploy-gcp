@@ -31,6 +31,15 @@ export const updateSigninStatus = (isSignedIn) => {
   };
 };
 
+export const signOut = () => {
+  return async (dispatch) => {
+    const GoogleAuth = window.gapi.auth2.getAuthInstance();
+    await GoogleAuth.signOut();
+
+    dispatch(updateSigninStatus(false));
+  }
+};
+
 export const fetchProjects = (token) => {
   return async (dispatch) => {
     try {
