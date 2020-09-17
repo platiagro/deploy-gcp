@@ -14,11 +14,11 @@ def enable_service(project_id: str, service_name: str, token: str) -> dict:
         A dict containing the response body.
     """
     host = "https://servicemanagement.googleapis.com"
-    url = "{}/v1/services/{}:enable".format(host, service_name)
+    url = f"{host}/v1/services/{service_name}:enable"
     resp = requests.post(url, json={
-        "consumerId": "project:{}".format(project_id),
+        "consumerId": f"project:{project_id}",
     }, headers={
-        "Authorization": "Bearer {}".format(token),
+        "Authorization": f"Bearer {token}",
     })
     resp.raise_for_status()
     return resp.json()
@@ -36,10 +36,9 @@ def get_service_account(project_id: str, service_account: str, token: str) -> di
         A dict containing the response body.
     """
     host = "https://iam.googleapis.com"
-    url = "{}/v1/projects/{}/serviceAccounts/{}".format(
-        host, project_id, service_account)
+    url = f"{host}/v1/projects/{project_id}/serviceAccounts/{service_account}"
     resp = requests.get(url, headers={
-        "Authorization": "Bearer {}".format(token),
+        "Authorization": f"Bearer {token}"
     })
     resp.raise_for_status()
     return resp.json()
@@ -57,15 +56,14 @@ def create_service_account(project_id: str, service_account: str, token: str) ->
         A dict containing the response body.
     """
     host = "https://iam.googleapis.com"
-    url = "{}/v1/projects/{}/serviceAccounts".format(
-        host, project_id, service_account)
+    url = f"{host}/v1/projects/{project_id}/serviceAccounts"
     resp = requests.post(url, json={
         "accountId": service_account,
         "serviceAccount": {
             "displayName": "platiagro service account",
         },
     }, headers={
-        "Authorization": "Bearer {}".format(token),
+        "Authorization": f"Bearer {token}",
     })
     resp.raise_for_status()
     return resp.json()
@@ -83,13 +81,12 @@ def create_service_account_key(project_id: str, service_account: str, token: str
         A dict containing the response body.
     """
     host = "https://iam.googleapis.com"
-    url = "{}/v1/projects/{}/serviceAccounts/{}/keys".format(
-        host, project_id, service_account)
+    url = f"{host}/v1/projects/{project_id}/serviceAccounts/{service_account}/keys"
     resp = requests.post(url, json={
         "privateKeyType": "TYPE_GOOGLE_CREDENTIALS_FILE",
         "keyAlgorithm": "KEY_ALG_RSA_2048",
     }, headers={
-        "Authorization": "Bearer {}".format(token),
+        "Authorization": f"Bearer {token}"
     })
     resp.raise_for_status()
     return resp.json()
@@ -106,9 +103,9 @@ def get_iam_policy(project_id: str, token: str) -> dict:
         A dict containing the response body.
     """
     host = "https://cloudresourcemanager.googleapis.com"
-    url = "{}/v1/projects/{}:getIamPolicy".format(host, project_id)
+    url = f"{host}/v1/projects/{project_id}:getIamPolicy"
     resp = requests.post(url, json={}, headers={
-        "Authorization": "Bearer {}".format(token),
+        "Authorization": f"Bearer {token}",
     })
     resp.raise_for_status()
     return resp.json()
@@ -126,11 +123,11 @@ def set_iam_policy(project_id: str, policy: dict, token: str) -> dict:
         A dict containing the response body.
     """
     host = "https://cloudresourcemanager.googleapis.com"
-    url = "{}/v1/projects/{}:setIamPolicy".format(host, project_id)
+    url = f"{host}/v1/projects/{project_id}:setIamPolicy"
     resp = requests.post(url, json={
         "policy": policy,
     }, headers={
-        "Authorization": "Bearer {}".format(token),
+        "Authorization": f"Bearer {token}"
     })
     resp.raise_for_status()
     return resp.json()
@@ -149,8 +146,7 @@ def create_cluster(project_id: str, location: str, cluster_id: str, token: str) 
         A dict containing the response body.
     """
     host = "https://container.googleapis.com"
-    url = "{}/v1beta1/projects/{}/locations/{}/clusters".format(
-        host, project_id, location)
+    url = f"{host}/v1beta1/projects/{project_id}/locations/{location}/clusters"
     resp = requests.post(url, json={
         "cluster": {
             "name": cluster_id,
@@ -166,7 +162,7 @@ def create_cluster(project_id: str, location: str, cluster_id: str, token: str) 
             "initialClusterVersion": "1.15",
         },
     }, headers={
-        "Authorization": "Bearer {}".format(token),
+        "Authorization": f"Bearer {token}"
     })
     resp.raise_for_status()
     return resp.json()
@@ -185,10 +181,9 @@ def get_cluster(project_id: str, location: str, cluster_id: str, token: str) -> 
         A dict containing the response body.
     """
     host = "https://container.googleapis.com"
-    url = "{}/v1beta1/projects/{}/locations/{}/clusters/{}".format(
-        host, project_id, location, cluster_id)
+    url = f"{host}/v1beta1/projects/{project_id}/locations/{location}/clusters/{cluster_id}"
     resp = requests.get(url, headers={
-        "Authorization": "Bearer {}".format(token),
+        "Authorization": f"Bearer {token}",
     })
     resp.raise_for_status()
     return resp.json()

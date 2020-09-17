@@ -52,7 +52,7 @@ def get_deployment_status(params: dict) -> dict:
         ip = proc.stdout
         m = match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", ip)
         if ip is not None and m is not None:
-            url = "http://{}".format(ip)
+            url = f"http://{ip}"
             # verify the platform is up and running
             retry_strategy = Retry(
                 total=5,
@@ -97,8 +97,7 @@ def create_deployment(params: dict) -> dict:
 
     # checks if service account already exists
     service_account = "platiagro-deploy-admin"
-    service_account_email = "{}@{}.iam.gserviceaccount.com".format(
-        service_account, project_id)
+    service_account_email = f"{service_account}@{project_id}.iam.gserviceaccount.com"
     try:
         get_service_account(project_id, service_account_email, token)
     except HTTPError as e:
@@ -119,7 +118,7 @@ def create_deployment(params: dict) -> dict:
                 "roles/iam.serviceAccountTokenCreator",
                 "roles/iam.serviceAccountUser",
             ]
-            member = "serviceAccount:{}".format(service_account_email)
+            member = f"serviceAccount:{service_account_email}"
             for role in roles:
                 policy["bindings"].append({"role": role, "members": [member]})
 
@@ -164,12 +163,12 @@ def install_in_the_background(project_id: str, location: str, cluster_id: str, c
         sleep(3)
 
     kubeconfig = empty_kubeconfig()
-    cluster_name = "gke_{}_{}_{}".format(project_id, location, cluster_id)
+    cluster_name = f"gke_{project_id}_{location}_{cluster_id}"
     # add cluster info
     kubeconfig["clusters"].append(
         cluster_kubeconfig(
             name=cluster_name,
-            server="https://{}".format(cluster["endpoint"]),
+            server=f"https://{cluster['endpoint']}",
             ca_data=cluster["masterAuth"]["clusterCaCertificate"],
         ),
     )
