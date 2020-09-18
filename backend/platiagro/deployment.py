@@ -8,10 +8,8 @@ from subprocess import run
 from tempfile import mkdtemp
 from time import sleep
 
-from requests import Session
-from requests.adapters import HTTPAdapter
-from requests.exceptions import HTTPError
-from requests.packages.urllib3.util.retry import Retry
+from requests import get
+from requests.exceptions import ConnectionError, HTTPError
 from yaml import dump
 
 from .gcloud import enable_service, get_service_account, create_service_account, \
@@ -33,11 +31,6 @@ def get_deployment_status(params: dict) -> dict:
         A dict containing the response body.
 
     """
-    project_id = params["projectId"]
-    zone = params["zone"]
-    cluster_id = params["clusterId"]
-    token = params["token"]
-
     try:
         proc = run([
             "kubectl",
@@ -54,18 +47,10 @@ def get_deployment_status(params: dict) -> dict:
         if ip is not None and m is not None:
             url = f"http://{ip}"
             # verify the platform is up and running
-            retry_strategy = Retry(
-                total=5,
-                status_forcelist=[429, 500, 502, 503, 504],
-                method_whitelist=["HEAD", "GET", "OPTIONS"]
-            )
-            adapter = HTTPAdapter(max_retries=retry_strategy)
-            sess = Session()
-            sess.mount("http://", adapter)
-            resp = sess.get(url)
+            resp = get(url)
             resp.raise_for_status()
             return {"status": RUNNING, "url": url}
-    except HTTPError as e:
+    except (ConnectionError, HTTPError):
         pass
     return {"status": PROVISIONING}
 
@@ -100,7 +85,7 @@ def create_deployment(params: dict) -> dict:
     service_account_email = f"{service_account}@{project_id}.iam.gserviceaccount.com"
     try:
         get_service_account(project_id, service_account_email, token)
-    except HTTPError as e:
+    except HTTPError:
         # creates service account
         create_service_account(project_id, service_account, token)
 
@@ -133,7 +118,7 @@ def create_deployment(params: dict) -> dict:
     create_service_account_key(project_id, service_account_email, token)
 
     # creates a GKE cluster
-    cluster = create_cluster(project_id, zone, cluster_id, token)
+    create_cluster(project_id, zone, cluster_id, token)
 
     # installs in the background
     p = Process(target=install_in_the_background, args=(
