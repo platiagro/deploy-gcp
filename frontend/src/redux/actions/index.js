@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { listProjects } from '../../services/gcloudService';
 import { createDeployment, getDeployment } from '../../services/deploymentService';
 
@@ -112,10 +114,13 @@ export const startDeployment = (projectId, zone, configFile, token) => {
       return;
     }
 
+    const randomStr = uuidv4().split('-')[0];
+    const clusterId = `platiagro-${randomStr}`;
+    dispatch(setClusterId(clusterId));
+
     dispatch(updateDeploymentStatus('PROVISIONING'));
 
     try {
-      const clusterId = 'platiagro';
       await createDeployment(projectId, zone, clusterId, configFile, token);
     } catch (e) {
       dispatch(updateDeploymentStatus('ERROR'));
