@@ -155,7 +155,7 @@ class DeployForm extends React.Component {
             </Form.Item>
             <Form.Item
               {...formItemLayout}
-              label='Versão da PlatIAgro'>
+              label='Versão'>
               <Select
                 {...versionProps}
                 onChange={setVersion}>
