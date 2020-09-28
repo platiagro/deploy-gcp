@@ -45,7 +45,7 @@ def get_deployment_status(params: dict) -> dict:
         ip = proc.stdout
         m = match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", ip)
         if ip is not None and m is not None:
-            url = f"https://{ip}"
+            url = f"http://{ip}"
             # verify the platform is up and running
             resp = get(url, verify=False, timeout=3)
             resp.raise_for_status()
