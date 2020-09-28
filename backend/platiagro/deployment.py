@@ -4,7 +4,7 @@ from multiprocessing import Process
 from os import chdir, makedirs
 from os.path import expanduser
 from re import match
-from subprocess import run
+from subprocess import run, TimeoutExpired
 from tempfile import mkdtemp
 from time import sleep
 
@@ -19,6 +19,7 @@ from .gcloud import enable_service, get_service_account, create_service_account,
 
 PROVISIONING = "PROVISIONING"
 RUNNING = "RUNNING"
+TIMEOUT_IN_SECONDS = 3
 
 
 def get_deployment_status(params: dict) -> dict:
@@ -41,16 +42,16 @@ def get_deployment_status(params: dict) -> dict:
             "istio-ingressgateway",
             "-o",
             "jsonpath={.status.loadBalancer.ingress[0].ip}"
-        ], capture_output=True, text=True)
+        ], capture_output=True, text=True, timeout=TIMEOUT_IN_SECONDS)
         ip = proc.stdout
         m = match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", ip)
         if ip is not None and m is not None:
             url = f"http://{ip}"
             # verify the platform is up and running
-            resp = get(url, verify=False, timeout=3)
+            resp = get(url, verify=False, timeout=TIMEOUT_IN_SECONDS)
             resp.raise_for_status()
             return {"status": RUNNING, "url": url}
-    except (ConnectionError, HTTPError, Timeout):
+    except (ConnectionError, HTTPError, Timeout, TimeoutExpired):
         pass
     return {"status": PROVISIONING}
 
