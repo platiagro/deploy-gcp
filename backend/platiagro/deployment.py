@@ -9,7 +9,7 @@ from tempfile import mkdtemp
 from time import sleep
 
 from requests import get
-from requests.exceptions import ConnectionError, HTTPError
+from requests.exceptions import ConnectionError, HTTPError, Timeout
 from yaml import dump
 
 from .gcloud import enable_service, get_service_account, create_service_account, \
@@ -47,10 +47,10 @@ def get_deployment_status(params: dict) -> dict:
         if ip is not None and m is not None:
             url = f"https://{ip}"
             # verify the platform is up and running
-            resp = get(url)
+            resp = get(url, verify=False, timeout=3)
             resp.raise_for_status()
             return {"status": RUNNING, "url": url}
-    except (ConnectionError, HTTPError):
+    except (ConnectionError, HTTPError, Timeout):
         pass
     return {"status": PROVISIONING}
 
