@@ -20,7 +20,7 @@ setup(
         # for making requests over HTTPS
         "requests==2.22.0",
         # YAML parser and emitter
-        "pyyaml==5.3",
+        "pyyaml==5.4",
     ],
     extras_require=extras,
     python_requires=">=3.5.0",
