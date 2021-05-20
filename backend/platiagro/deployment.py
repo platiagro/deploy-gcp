@@ -118,8 +118,16 @@ def create_deployment(params: dict) -> dict:
     # creates service account key
     create_service_account_key(project_id, service_account_email, token)
 
+    # Retrieves stable cluster versions from GKE
+    cluster_version = "1.18"
+    server_config = get_server_config()
+    for channel in server_config["channels"]:
+        if channel["channel"] == "STABLE":
+            cluster_version = channel["defaultVersion"].split("-")[0]
+            break
+
     # creates a GKE cluster
-    create_cluster(project_id, zone, cluster_id, token)
+    create_cluster(project_id, zone, cluster_id, token, cluster_version)
 
     # installs in the background
     p = Process(target=install_in_the_background, args=(

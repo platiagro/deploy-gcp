@@ -133,7 +133,7 @@ def set_iam_policy(project_id: str, policy: dict, token: str) -> dict:
     return resp.json()
 
 
-def create_cluster(project_id: str, location: str, cluster_id: str, token: str) -> dict:
+def create_cluster(project_id: str, location: str, cluster_id: str, token: str, cluster_version: str) -> dict:
     """Creates a cluster in the Identity and Access Management API.
 
     Args:
@@ -141,6 +141,7 @@ def create_cluster(project_id: str, location: str, cluster_id: str, token: str) 
         location: Google Compute Engine zone.
         cluster_id: Cluster ID
         token: Access token from the Google Authorization Server.
+        cluster_version: Cluster version.
 
     Returns:
         A dict containing the response body.
@@ -159,7 +160,7 @@ def create_cluster(project_id: str, location: str, cluster_id: str, token: str) 
                     }
                 },
             ],
-            "initialClusterVersion": "1.15",
+            "initialClusterVersion": cluster_version,
         },
     }, headers={
         "Authorization": f"Bearer {token}"
@@ -182,6 +183,26 @@ def get_cluster(project_id: str, location: str, cluster_id: str, token: str) -> 
     """
     host = "https://container.googleapis.com"
     url = f"{host}/v1beta1/projects/{project_id}/locations/{location}/clusters/{cluster_id}"
+    resp = requests.get(url, headers={
+        "Authorization": f"Bearer {token}",
+    })
+    resp.raise_for_status()
+    return resp.json()
+
+
+def get_server_config(project_id: str, location: str, token: str) -> dict:
+    """Gets configutation about GKE Server.
+
+    Args:
+        project_id: GCP project ID.
+        location: Google Compute Engine zone.
+        token: Access token from the Google Authorization Server.
+
+    Returns:
+        A dict containing the response body.
+    """
+    host = "https://container.googleapis.com"
+    url = f"{host}/v1beta1/projects/{project_id}/locations/{location}/serverConfig"
     resp = requests.get(url, headers={
         "Authorization": f"Bearer {token}",
     })

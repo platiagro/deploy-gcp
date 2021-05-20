@@ -26,6 +26,10 @@ const initialState = {
   ],
   versionList: [
     {
+      value: 'https://raw.githubusercontent.com/platiagro/manifests/v0.2.0-kubeflow-v1.2-branch/kfdef/kfctl_k8s_platiagro.v0.2.0.yaml',
+      text: 'PlatIAgro v0.2.0',
+    },
+    {
       value: 'https://raw.githubusercontent.com/platiagro/manifests/v0.1.0-kubeflow-v1.0-branch/kfdef/kfctl_platiagro.v0.1.0.yaml',
       text: 'PlatIAgro v0.1.0',
     },
@@ -40,7 +44,7 @@ const initialState = {
   ],
   projectId: '',
   zone: 'us-central1-a',
-  version: 'https://raw.githubusercontent.com/platiagro/manifests/v0.1.0-kubeflow-v1.0-branch/kfdef/kfctl_platiagro.v0.1.0.yaml',
+  version: 'https://raw.githubusercontent.com/platiagro/manifests/v0.2.0-kubeflow-v1.2-branch/kfdef/kfctl_k8s_platiagro.v0.2.0.yaml',
   clusterId: 'platiagro',
   status: '',
   url: '',
