@@ -14,7 +14,7 @@ from yaml import dump
 
 from .gcloud import enable_service, get_service_account, create_service_account, \
     create_service_account_key, get_iam_policy, set_iam_policy, create_cluster, \
-    get_cluster
+    get_cluster, get_server_config
 
 
 PROVISIONING = "PROVISIONING"
@@ -120,7 +120,7 @@ def create_deployment(params: dict) -> dict:
 
     # Retrieves stable cluster versions from GKE
     cluster_version = "1.18"
-    server_config = get_server_config()
+    server_config = get_server_config(project_id, zone, token)
     for channel in server_config["channels"]:
         if channel["channel"] == "STABLE":
             cluster_version = channel["defaultVersion"].split("-")[0]
