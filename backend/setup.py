@@ -16,7 +16,7 @@ setup(
     install_requires=[
         # WSGI server
         "Flask==1.1.1",
-        "Flask-Cors==3.0.8",
+        "Flask-Cors==3.0.9",
         # for making requests over HTTPS
         "requests==2.22.0",
         # YAML parser and emitter
