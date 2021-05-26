@@ -14,6 +14,7 @@ const Description = () => (
     <ul>
       <li>Informe o projeto GCP que você deseja utilizar</li>
       <li>Escolha a zona na qual deseja implantar a PlatIAgro</li>
+      <li>Escolha o tipo de máquina</li>
       <li>Escolha a versão da PlatIAgro</li>
       <li>Clique em Implantar</li>
       <li>Você será redirecionado assim que a implantação estiver pronta</li>

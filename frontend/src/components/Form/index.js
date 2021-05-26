@@ -7,7 +7,9 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import {
   updateSigninStatus, fetchProjects, setProjectId,
-  setZone, setVersion, startDeployment, signOut, verifyDeploymentStatus
+  setZone, setMachineType, setNodeCount, setVersion, startDeployment, signOut,
+  verifyDeploymentStatus,
+  setAccelerator
 } from '../../redux/actions';
 
 const { Title } = Typography;
@@ -76,8 +78,10 @@ class DeployForm extends React.Component {
 
   renderSwitch(status) {
     const {
-      token, projectList, zoneList, versionList, projectId, setProjectId,
-      zone, setZone, version, setVersion, startDeployment, signOut,
+      token, projectList, zoneList, machineTypeList, nodeCountList, acceleratorList, versionList,
+      projectId, setProjectId, zone, setZone, machineType, setMachineType,
+      nodeCount, setNodeCount, version, setVersion, accelerator, setAccelerator,
+      startDeployment, signOut,
     } = this.props;
 
     const projectIdProps = {};
@@ -86,12 +90,26 @@ class DeployForm extends React.Component {
       projectIdProps.help = 'Selecione um projeto do GCP';
     }
 
-    const zoneProps = {};
+    const zoneProps = {value: zone};
     if (zoneList.length > 0) {
       zoneProps.defaultValue = zoneList[0];
     }
 
-    const versionProps = {};
+    const machineTypeProps = {value: machineType};
+    if (machineTypeList.length > 0) {
+      machineTypeProps.defaultValue = machineTypeList[1].value;
+    }
+
+    const nodeCountProps = {value: nodeCount};
+    if (nodeCountList.length > 0) {
+      nodeCountProps.defaultValue = nodeCountList[0].value;
+    }
+
+    const acceleratorProps = {value: accelerator};
+    if (acceleratorList.length > 0) {
+      acceleratorProps.defaultValue = acceleratorList[0].value;
+    }
+    const versionProps = {value: version};
     if (versionList.length > 0) {
       versionProps.defaultValue = versionList[0].value;
     }
@@ -102,7 +120,7 @@ class DeployForm extends React.Component {
       default:
         const formItemLayout = {
           labelCol: { span: 7 },
-          wrapperCol: { span: 12 },
+          wrapperCol: { span: 15 },
         };
         return (
           <Form>
@@ -155,6 +173,46 @@ class DeployForm extends React.Component {
             </Form.Item>
             <Form.Item
               {...formItemLayout}
+              label='Tipo de máquina'>
+              <Select
+                {...machineTypeProps}
+                onChange={(v) => {
+                  if (!v.startsWith("n1-")) {
+                    setAccelerator(null);
+                  }
+                  setMachineType(v);
+                }}>
+                {machineTypeList.map((m) => (
+                  <Option key={m.value} value={m.value}>{m.text}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              {...formItemLayout}
+              label='Máquinas'>
+              <Select
+                {...nodeCountProps}
+                onChange={setNodeCount}>
+                {nodeCountList.map((n) => (
+                  <Option key={n.value} value={n.value}>{n.text}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              {...formItemLayout}
+              label='GPU'>
+              <Select
+                {...acceleratorProps}
+                onChange={setAccelerator}>
+                {acceleratorList.filter((a) => (
+                    a.value == null || machineType.startsWith("n1-")
+                  )).map((m) => (
+                  <Option key={m.value} value={m.value}>{m.text}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              {...formItemLayout}
               label='Versão'>
               <Select
                 {...versionProps}
@@ -169,7 +227,7 @@ class DeployForm extends React.Component {
                 type='primary'
                 htmlType='button'
                 className='login-form-button'
-                onClick={() => startDeployment(projectId, zone, version, token)}>
+                onClick={() => startDeployment(projectId, zone, nodeCount, accelerator, machineType, version, token)}>
                 Implantar
               </Button>
               <Button
@@ -204,8 +262,9 @@ const WaitingForm = () => (
 
 const CustomForm = ({
   isAuthorized, token, updateSigninStatus, fetchProjects,
-  createProject, projectList, zoneList, versionList, projectId, setProjectId,
-  zone, setZone, version, setVersion,
+  createProject, projectList, zoneList, machineTypeList, nodeCountList, acceleratorList, versionList,
+  projectId, setProjectId, zone, setZone, version, setVersion, machineType, setMachineType,
+  nodeCount, setNodeCount, accelerator, setAccelerator,
   clusterId, startDeployment, signOut, status, url, isPolling, verifyDeploymentStatus
 }) => (
     <Layout className='deployForm'>
@@ -217,6 +276,9 @@ const CustomForm = ({
           createProject={createProject}
           projectList={projectList}
           zoneList={zoneList}
+          machineTypeList={machineTypeList}
+          nodeCountList={nodeCountList}
+          acceleratorList={acceleratorList}
           versionList={versionList}
           projectId={projectId}
           setProjectId={setProjectId}
@@ -224,6 +286,12 @@ const CustomForm = ({
           setZone={setZone}
           version={version}
           setVersion={setVersion}
+          machineType={machineType}
+          setMachineType={setMachineType}
+          nodeCount={nodeCount}
+          setNodeCount={setNodeCount}
+          accelerator={accelerator}
+          setAccelerator={setAccelerator}
           clusterId={clusterId}
           startDeployment={startDeployment}
           signOut={signOut}
@@ -248,11 +316,17 @@ const mapStateToProps = (state) => {
     // deployment props
     projectList: state.projectList,
     zoneList: state.zoneList,
+    machineTypeList: state.machineTypeList,
+    nodeCountList: state.nodeCountList,
+    acceleratorList: state.acceleratorList,
     versionList: state.versionList,
     isCreatingProject: state.isCreatingProject,
     projectId: state.projectId,
     projectName: state.projectName,
     zone: state.zone,
+    machineType: state.machineType,
+    nodeCount: state.nodeCount,
+    accelerator: state.accelerator,
     version: state.version,
     clusterId: state.clusterId,
     status: state.status,
@@ -269,6 +343,9 @@ const mapDispatchToProps = {
   fetchProjects,
   setProjectId,
   setZone,
+  setMachineType,
+  setNodeCount,
+  setAccelerator,
   setVersion,
   startDeployment,
   signOut,

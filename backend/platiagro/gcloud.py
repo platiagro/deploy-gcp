@@ -1,4 +1,6 @@
 """Accesses Google Cloud Resources"""
+from typing import Optional
+
 import requests
 
 
@@ -133,12 +135,15 @@ def set_iam_policy(project_id: str, policy: dict, token: str) -> dict:
     return resp.json()
 
 
-def create_cluster(project_id: str, location: str, cluster_id: str, token: str, cluster_version: str) -> dict:
+def create_cluster(project_id: str, location: str, node_count: int, machine_type: str, accelerator: Optional[str], cluster_id: str, token: str, cluster_version: str) -> dict:
     """Creates a cluster in the Identity and Access Management API.
 
     Args:
         project_id: GCP project ID.
         location: Google Compute Engine zone.
+        node_count: Initial node count.
+        machine_type: Machine type.
+        accelerator: Accelerator machine type.
         cluster_id: Cluster ID
         token: Access token from the Google Authorization Server.
         cluster_version: Cluster version.
@@ -148,21 +153,29 @@ def create_cluster(project_id: str, location: str, cluster_id: str, token: str, 
     """
     host = "https://container.googleapis.com"
     url = f"{host}/v1beta1/projects/{project_id}/locations/{location}/clusters"
-    resp = requests.post(url, json={
+    body = {
         "cluster": {
             "name": cluster_id,
             "nodePools": [
                 {
                     "name": "default-pool",
-                    "initialNodeCount": 2,
+                    "initialNodeCount": node_count,
                     "config": {
-                        "machineType": "e2-standard-4",
-                    }
+                        "machineType": machine_type,
+                    },
                 },
             ],
             "initialClusterVersion": cluster_version,
         },
-    }, headers={
+    }
+    if accelerator:
+        body["cluster"]["nodePools"][0]["config"]["accelerators"] = [{
+            {
+                "acceleratorCount": "1",
+                "acceleratorType": accelerator,
+            }
+        }]
+    resp = requests.post(url, json=body, headers={
         "Authorization": f"Bearer {token}"
     })
     resp.raise_for_status()

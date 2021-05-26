@@ -6,11 +6,15 @@ import { createDeployment, getDeployment } from '../../services/deploymentServic
 export const UPDATE_SIGNIN_STATUS = 'UPDATE_SIGNIN_STATUS';
 export const SET_PROJECT_LIST = 'SET_PROJECT_LIST';
 export const SET_ZONE_LIST = 'SET_ZONE_LIST';
+export const SET_MACHINE_TYPE_LIST = 'SET_MACHINE_TYPE_LIST';
 export const SET_VERSION_LIST = 'SET_VERSION_LIST';
 export const SET_IS_CREATING_PROJECT = 'SET_IS_CREATING_PROJECT';
 export const SET_PROJECT_ID = 'SET_PROJECT_ID';
 export const SET_PROJECT_NAME = 'SET_PROJECT_NAME';
 export const SET_ZONE = 'SET_ZONE';
+export const SET_MACHINE_TYPE = 'SET_MACHINE_TYPE';
+export const SET_ACCELERATOR = 'SET_ACCELERATOR';
+export const SET_NODE_COUNT = 'SET_NODE_COUNT';
 export const SET_VERSION = 'SET_VERSION';
 export const SET_CLUSTER_ID = 'SET_CLUSTER_ID';
 export const UPDATE_PROJECT_CREATION_STATUS = 'UPDATE_PROJECT_CREATION_STATUS';
@@ -89,6 +93,33 @@ export const setZone = (zone) => {
   };
 };
 
+export const setMachineType = (machineType) => {
+  return {
+    type: SET_MACHINE_TYPE,
+    payload: {
+      machineType: machineType
+    }
+  };
+};
+
+export const setNodeCount = (nodeCount) => {
+  return {
+    type: SET_NODE_COUNT,
+    payload: {
+      nodeCount: nodeCount
+    }
+  };
+};
+
+export const setAccelerator = (accelerator) => {
+  return {
+    type: SET_ACCELERATOR,
+    payload: {
+      accelerator: accelerator
+    }
+  };
+};
+
 export const setVersion = (version) => {
   return {
     type: SET_VERSION,
@@ -107,7 +138,7 @@ export const setClusterId = (clusterId) => {
   };
 };
 
-export const startDeployment = (projectId, zone, configFile, token) => {
+export const startDeployment = (projectId, zone, nodeCount, accelerator, machineType, configFile, token) => {
   return async (dispatch) => {
     if (projectId === '') {
       dispatch(updateDeploymentStatus('PROJECT_UNDEFINED'));
@@ -121,7 +152,7 @@ export const startDeployment = (projectId, zone, configFile, token) => {
     dispatch(updateDeploymentStatus('PROVISIONING'));
 
     try {
-      await createDeployment(projectId, zone, clusterId, configFile, token);
+      await createDeployment(projectId, zone, nodeCount, accelerator, machineType, clusterId, configFile, token);
     } catch (e) {
       dispatch(updateDeploymentStatus('ERROR'));
       return;
