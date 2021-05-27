@@ -65,7 +65,7 @@ const initialState = {
   acceleratorList: [
     {
       value: null,
-      text: 'Nenhum'
+      text: 'Nenhuma'
     },
     {
       value: 'nvidia-tesla-t4',

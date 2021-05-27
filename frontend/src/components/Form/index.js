@@ -86,7 +86,7 @@ class DeployForm extends React.Component {
     const projectIdProps = {};
     if (status === 'PROJECT_UNDEFINED') {
       projectIdProps.validateStatus = 'error';
-      projectIdProps.help = 'Selecione um projeto do GCP';
+      projectIdProps.help = 'Selecione um projeto da GCP';
     }
 
     const zoneProps = {value: zone};
@@ -202,11 +202,9 @@ class DeployForm extends React.Component {
               label={
                 <Tooltip title={
                   <>
-                    <ul>
-                      <li><small>As GPUs podem ser anexadas apenas a tipos de máquinas n1-standard.</small></li>
-                      <li><small>Para proteger os usuários, novos projetos têm uma cota global de GPU igual a zero. Crie um projeto e solicite um aumento de cota global de utilizar esta ferramenta.</small></li>
-                      <li><small>Verifique a disponibilidade da GPU na Zona selecionada e outros detalhes clicando no ícone <InfoCircleOutlined />.</small></li>
-                    </ul>
+                    <p>As GPUs podem ser anexadas apenas a tipos de máquinas n1-standard.</p>
+                    <p>Para proteger os usuários, novos projetos da GCP têm uma cota global de GPU igual a zero. Antes de utilizar esta ferramenta, solicite um aumento de cota global de GPU no projeto da GCP.</p>
+                    <p>Verifique a disponibilidade da GPU na Zona selecionada e outros detalhes clicando no ícone <InfoCircleOutlined />.</p>
                   </>
                   }>
                   <Button type='text'
