@@ -164,8 +164,17 @@ def install_in_the_background(project_id: str, location: str, cluster_id: str, c
     while True:
         # get cluster info
         cluster = get_cluster(project_id, location, cluster_id, token)
-        if cluster["status"] != "PROVISIONING":
+        if cluster["status"] == RUNNING:
             break
+        elif cluster["status"] != PROVISIONING:
+            logging.error((
+                f"Cluster is in a failure state. "
+                f"project_id={project_id}, "
+                f"location={location}, "
+                f"cluster_id={cluster_id}, "
+                f"token={token}, "
+                f"{str(cluster)}"
+            ))
         sleep(3)
 
     kubeconfig = empty_kubeconfig()
