@@ -200,7 +200,7 @@ class DeployForm extends React.Component {
             <Form.Item
               {...formItemLayout}
               label={
-                <Tooltip title={
+                <Tooltip placement="left" title={
                   <>
                     <p>As GPUs podem ser anexadas apenas a tipos de máquinas n1-standard.</p>
                     <p>Para proteger os usuários, novos projetos da GCP têm uma cota global de GPU igual a zero. Antes de utilizar esta ferramenta, solicite um aumento de cota global de GPU no projeto da GCP.</p>
