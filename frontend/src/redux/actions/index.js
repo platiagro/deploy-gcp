@@ -138,7 +138,7 @@ export const setClusterId = (clusterId) => {
   };
 };
 
-export const startDeployment = (projectId, zone, nodeCount, accelerator, machineType, configFile, token) => {
+export const startDeployment = (projectId, zone, machineType, nodeCount, accelerator, configFile, token) => {
   return async (dispatch) => {
     if (projectId === '') {
       dispatch(updateDeploymentStatus('PROJECT_UNDEFINED'));
@@ -152,7 +152,7 @@ export const startDeployment = (projectId, zone, nodeCount, accelerator, machine
     dispatch(updateDeploymentStatus('PROVISIONING'));
 
     try {
-      await createDeployment(projectId, zone, nodeCount, accelerator, machineType, clusterId, configFile, token);
+      await createDeployment(projectId, zone, machineType, nodeCount, accelerator, clusterId, configFile, token);
     } catch (e) {
       dispatch(updateDeploymentStatus('ERROR'));
       return;

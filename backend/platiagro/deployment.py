@@ -68,8 +68,8 @@ def create_deployment(params: dict) -> dict:
     """
     project_id = params["projectId"]
     zone = params["zone"]
-    node_count = params["nodeCount"]
     machine_type = params["machineType"]
+    node_count = params["nodeCount"]
     accelerator = params["accelerator"]
     cluster_id = params["clusterId"]
     config_file = params["configFile"]
@@ -132,9 +132,9 @@ def create_deployment(params: dict) -> dict:
     # creates a GKE cluster
     create_cluster(
         project_id=project_id,
-        zone=zone,
-        node_count=node_count,
+        location=zone,
         machine_type=machine_type,
+        node_count=node_count,
         accelerator=accelerator,
         cluster_id=cluster_id,
         token=token,

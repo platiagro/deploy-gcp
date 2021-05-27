@@ -7,12 +7,12 @@ const backend = axios.create({
   baseURL: URL
 });
 
-export const createDeployment = async (projectId, zone, nodeCount, machineType, accelerator, clusterId, configFile, token) => {
+export const createDeployment = async (projectId, zone, machineType, nodeCount, accelerator, clusterId, configFile, token) => {
   return backend.put('/v1/deployments', {
     projectId: projectId,
     zone: zone,
-    nodeCount: nodeCount,
     machineType: machineType,
+    nodeCount: nodeCount,
     accelerator: accelerator,
     clusterId: clusterId,
     configFile: configFile,

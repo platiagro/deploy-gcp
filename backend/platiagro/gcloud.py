@@ -1,4 +1,6 @@
 """Accesses Google Cloud Resources"""
+import json
+import logging
 from typing import Optional
 
 import requests
@@ -22,7 +24,11 @@ def enable_service(project_id: str, service_name: str, token: str) -> dict:
     }, headers={
         "Authorization": f"Bearer {token}",
     })
-    resp.raise_for_status()
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        logging.error(err.response.text)
+        raise err
     return resp.json()
 
 
@@ -42,7 +48,11 @@ def get_service_account(project_id: str, service_account: str, token: str) -> di
     resp = requests.get(url, headers={
         "Authorization": f"Bearer {token}"
     })
-    resp.raise_for_status()
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        logging.error(err.response.text)
+        raise err
     return resp.json()
 
 
@@ -67,7 +77,11 @@ def create_service_account(project_id: str, service_account: str, token: str) ->
     }, headers={
         "Authorization": f"Bearer {token}",
     })
-    resp.raise_for_status()
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        logging.error(err.response.text)
+        raise err
     return resp.json()
 
 
@@ -90,7 +104,11 @@ def create_service_account_key(project_id: str, service_account: str, token: str
     }, headers={
         "Authorization": f"Bearer {token}"
     })
-    resp.raise_for_status()
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        logging.error(err.response.text)
+        raise err
     return resp.json()
 
 
@@ -109,7 +127,11 @@ def get_iam_policy(project_id: str, token: str) -> dict:
     resp = requests.post(url, json={}, headers={
         "Authorization": f"Bearer {token}",
     })
-    resp.raise_for_status()
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        logging.error(err.response.text)
+        raise err
     return resp.json()
 
 
@@ -131,18 +153,22 @@ def set_iam_policy(project_id: str, policy: dict, token: str) -> dict:
     }, headers={
         "Authorization": f"Bearer {token}"
     })
-    resp.raise_for_status()
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        logging.error(err.response.text)
+        raise err
     return resp.json()
 
 
-def create_cluster(project_id: str, location: str, node_count: int, machine_type: str, accelerator: Optional[str], cluster_id: str, token: str, cluster_version: str) -> dict:
+def create_cluster(project_id: str, location: str, machine_type: str, node_count: int, accelerator: Optional[str], cluster_id: str, token: str, cluster_version: str) -> dict:
     """Creates a cluster in the Identity and Access Management API.
 
     Args:
         project_id: GCP project ID.
         location: Google Compute Engine zone.
-        node_count: Initial node count.
         machine_type: Machine type.
+        node_count: Initial node count.
         accelerator: Accelerator machine type.
         cluster_id: Cluster ID
         token: Access token from the Google Authorization Server.
@@ -159,7 +185,7 @@ def create_cluster(project_id: str, location: str, node_count: int, machine_type
             "nodePools": [
                 {
                     "name": "default-pool",
-                    "initialNodeCount": node_count,
+                    "initialNodeCount": node_count - 1 if accelerator else node_count,
                     "config": {
                         "machineType": machine_type,
                     },
@@ -169,16 +195,25 @@ def create_cluster(project_id: str, location: str, node_count: int, machine_type
         },
     }
     if accelerator:
-        body["cluster"]["nodePools"][0]["config"]["accelerators"] = [{
-            {
-                "acceleratorCount": "1",
-                "acceleratorType": accelerator,
-            }
-        }]
+        body["cluster"]["nodePools"].append({
+            "name": "accelerator-pool",
+            "initialNodeCount": 1,
+            "config": {
+                "machineType": machine_type,
+                "accelerators": [{
+                    "acceleratorCount": "1",
+                    "acceleratorType": accelerator,
+                }],
+            },
+        })
     resp = requests.post(url, json=body, headers={
         "Authorization": f"Bearer {token}"
     })
-    resp.raise_for_status()
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        logging.error(err.response.text)
+        raise err
     return resp.json()
 
 
@@ -199,7 +234,11 @@ def get_cluster(project_id: str, location: str, cluster_id: str, token: str) -> 
     resp = requests.get(url, headers={
         "Authorization": f"Bearer {token}",
     })
-    resp.raise_for_status()
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        logging.error(err.response.text)
+        raise err
     return resp.json()
 
 
@@ -219,5 +258,9 @@ def get_server_config(project_id: str, location: str, token: str) -> dict:
     resp = requests.get(url, headers={
         "Authorization": f"Bearer {token}",
     })
-    resp.raise_for_status()
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        logging.error(err.response.text)
+        raise err
     return resp.json()

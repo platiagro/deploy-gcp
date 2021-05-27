@@ -1,15 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  Layout, Typography, Form, Button, Select, Divider, Spin, Alert
+  Layout, Typography, Form, Button, Select, Divider, Spin, Alert, Tooltip,
 } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
 import {
   updateSigninStatus, fetchProjects, setProjectId,
-  setZone, setMachineType, setNodeCount, setVersion, startDeployment, signOut,
-  verifyDeploymentStatus,
-  setAccelerator
+  setZone, setMachineType, setNodeCount, setAccelerator, setVersion, startDeployment, signOut,
+  verifyDeploymentStatus
 } from '../../redux/actions';
 
 const { Title } = Typography;
@@ -177,7 +176,7 @@ class DeployForm extends React.Component {
               <Select
                 {...machineTypeProps}
                 onChange={(v) => {
-                  if (!v.startsWith("n1-")) {
+                  if (!v.startsWith('n1-')) {
                     setAccelerator(null);
                   }
                   setMachineType(v);
@@ -200,12 +199,27 @@ class DeployForm extends React.Component {
             </Form.Item>
             <Form.Item
               {...formItemLayout}
-              label='GPU'>
+              label={
+                <Tooltip title={
+                  <>
+                    <ul>
+                      <li><small>As GPUs podem ser anexadas apenas a tipos de máquinas n1-standard.</small></li>
+                      <li><small>Para proteger os usuários, novos projetos têm uma cota global de GPU igual a zero. Crie um projeto e solicite um aumento de cota global de utilizar esta ferramenta.</small></li>
+                      <li><small>Verifique a disponibilidade da GPU na Zona selecionada e outros detalhes clicando no ícone <InfoCircleOutlined />.</small></li>
+                    </ul>
+                  </>
+                  }>
+                  <Button type='text'
+                    onClick={() => window.open('https://cloud.google.com/compute/docs/gpus/gpu-regions-zones')}>
+                    GPU<InfoCircleOutlined />
+                  </Button>
+                </Tooltip>
+              }>
               <Select
                 {...acceleratorProps}
                 onChange={setAccelerator}>
                 {acceleratorList.filter((a) => (
-                    a.value == null || machineType.startsWith("n1-")
+                    a.value == null || machineType.startsWith('n1-')
                   )).map((m) => (
                   <Option key={m.value} value={m.value}>{m.text}</Option>
                 ))}
@@ -227,7 +241,7 @@ class DeployForm extends React.Component {
                 type='primary'
                 htmlType='button'
                 className='login-form-button'
-                onClick={() => startDeployment(projectId, zone, nodeCount, accelerator, machineType, version, token)}>
+                onClick={() => startDeployment(projectId, zone, machineType, nodeCount, accelerator, version, token)}>
                 Implantar
               </Button>
               <Button
